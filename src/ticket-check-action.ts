@@ -90,13 +90,13 @@ export async function run(): Promise<void> {
         return;
       }
 
-      client.rest.pulls.createReview({
-        owner,
-        repo,
-        pull_number: number,
-        body: `See the ticket for this pull request: ${linkToTicket}`,
-        event: 'COMMENT',
-      });
+      // client.rest.pulls.createReview({
+      //   owner,
+      //   repo,
+      //   pull_number: number,
+      //   body: `See the ticket for this pull request: ${linkToTicket}`,
+      //   event: 'COMMENT',
+      // });
     };
 
     // get the title format and ticket prefix
