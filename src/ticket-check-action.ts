@@ -42,7 +42,8 @@ export async function run(): Promise<void> {
     const senderType = context.payload.pull_request?.user.type as string;
     const sender: string = senderType === 'Bot' ? login.replace('[bot]', '') : login;
 
-    const quiet = getInput('quiet', { required: false }) === 'true';
+    const commentOnTitleUpdate = getInput('commentOnTitleUpdate', { required: false }) === 'true';
+    const commentWithTicketLink = getInput('commentWithTicketLink', { required: false }) === 'true';
 
     // Exempt Users
     const exemptUsers = getInput('exemptUsers', { required: false })
@@ -90,13 +91,15 @@ export async function run(): Promise<void> {
         return;
       }
 
-      // client.rest.pulls.createReview({
-      //   owner,
-      //   repo,
-      //   pull_number: number,
-      //   body: `See the ticket for this pull request: ${linkToTicket}`,
-      //   event: 'COMMENT',
-      // });
+      if (commentWithTicketLink) {
+        client.rest.pulls.createReview({
+          owner,
+          repo,
+          pull_number: number,
+          body: `See the ticket for this pull request: ${linkToTicket}`,
+          event: 'COMMENT',
+        });
+      }
     };
 
     // get the title format and ticket prefix
@@ -149,7 +152,7 @@ export async function run(): Promise<void> {
         title: newTitle.replace('%title%', title),
       });
 
-      if (!quiet) {
+      if (commentOnTitleUpdate) {
         client.rest.pulls.createReview({
           owner,
           repo,
@@ -167,7 +170,7 @@ export async function run(): Promise<void> {
     // Debugging Entries
     debug('sender', sender);
     debug('sender type', senderType);
-    debug('quiet mode', quiet.toString());
+    debug('comment on title update', commentOnTitleUpdate.toString());
     debug('exempt users', exemptUsers.join(','));
     debug('ticket link', ticketLink);
 
@@ -232,7 +235,7 @@ export async function run(): Promise<void> {
         title: newTitle.replace('%title%', title),
       });
 
-      if (!quiet) {
+      if (commentOnTitleUpdate) {
         client.rest.pulls.createReview({
           owner,
           repo,
@@ -310,7 +313,7 @@ export async function run(): Promise<void> {
         title: newTitle.replace('%title%', title),
       });
 
-      if (!quiet) {
+      if (commentOnTitleUpdate) {
         client.rest.pulls.createReview({
           owner,
           repo,
