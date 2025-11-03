@@ -116,6 +116,14 @@ export async function run(): Promise<void> {
     const branchCheck = branchRegex.exec(branch);
 
     if (branchCheck !== null) {
+      // Don't update title if it already has a valid ticket ID
+      if (titleCheck !== null) {
+        debug('success', 'Title already contains a valid ticket ID, skipping branch update');
+        await linkTicket(titleCheck);
+
+        return;
+      }
+
       debug('success', 'Branch name contains a reference to a ticket, updating title');
 
       const id = extractId(branch);
@@ -199,6 +207,14 @@ export async function run(): Promise<void> {
     const bodyCheck = bodyRegex.exec(body);
 
     if (bodyCheck !== null) {
+      // Don't update title if it already has a valid ticket ID
+      if (titleCheck !== null) {
+        debug('success', 'Title already contains a valid ticket ID, skipping body update');
+        await linkTicket(titleCheck);
+
+        return;
+      }
+
       debug('success', 'Body contains a reference to a ticket, updating title');
 
       const id = extractId(bodyCheck[0]);
@@ -277,6 +293,14 @@ export async function run(): Promise<void> {
     const bodyURLCheck = bodyURLRegex.exec(body);
 
     if (bodyURLCheck !== null) {
+      // Don't update title if it already has a valid ticket ID
+      if (titleCheck !== null) {
+        debug('success', 'Title already contains a valid ticket ID, skipping body URL update');
+        await linkTicket(titleCheck);
+
+        return;
+      }
+
       debug('success', 'Body contains a ticket URL, updating title');
 
       const id = extractId(bodyURLCheck[0]);
