@@ -57,9 +57,9 @@ inputs:
     default: ''
     required: false
 
-  quiet:
-    description: 'Suppress comment on successful PR title update'
-    default: 'true'
+  commentOnTitleUpdate:
+    description: 'Post a comment when the PR title is automatically updated'
+    default: 'false'
     required: false
 
   token:
@@ -68,6 +68,11 @@ inputs:
 
   ticketLink:
     description: 'Ticket URL with `%ticketNumber%` placeholder'
+    required: false
+
+  commentWithTicketLink:
+    description: 'Post a comment with a link to the ticket when a ticket is found'
+    default: 'false'
     required: false
 
 runs:
